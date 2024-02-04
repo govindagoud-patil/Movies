@@ -15,13 +15,14 @@
 
  dotnet tool update --global dotnet-ef
 
+# Entity migration commands
 1. Initialize ef Migration
 Dotnet ef migrations add Init -s .\src\Movies.Presentation\ -p .\src\Movies.Infrastructure\ 
 2. apply or update the migration
 Dotnet ef database update -s .\src\Movies.Presentation\ -p .\src\Movies.Infrastructure\
 
 
-# To Run React Navigate to React movie folder run below commands
+# To Run ->  Navigate to React movie folder run below commands
 
 npm install
 npm run dev

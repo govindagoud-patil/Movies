@@ -13,7 +13,7 @@ namespace Movies.Presentation
             {
                 var movies = await mediator.Send(new GetMoviesQuery());
                 return Results.Ok(movies);
-            }).WithTags("Movies");
+            }).WithTags("Movies").RequireAuthorization();
 
             route.MapGet("/api/movies/{id}", async (IMediator mediator,int id, CancellationToken ct) =>
             {
@@ -41,7 +41,7 @@ namespace Movies.Presentation
                 var deleteMovieCommand = new DeleteMovieCommand(id);
                 var movie = await mediator.Send(deleteMovieCommand, ct);
                 return Results.Ok(movie);
-            });
+            }).WithTags("Movies");
 
         }
     }

@@ -3,17 +3,14 @@ import { MovieDto } from "../../models/movieDto"
 import apiConnector from "../../api/apiConnector";
 import { NavLink } from "react-router-dom";
 import axios from "axios";
-import { token } from "../../models/token";
+import authSvc from "../../auth/authSvc";
 
 interface Props {
     movie: MovieDto;
 }
 export default function MovieTableItems({ movie }: Props) {
     
-    function logoutHandler()
-    {
-        localStorage.removeItem("token");
-    }
+
     return (
         <>
             <tr className="center aligned">
@@ -26,13 +23,13 @@ export default function MovieTableItems({ movie }: Props) {
                     <Button as={NavLink} to={`editMovie/${movie.id}`} color="yellow" type="submit" >Edit</Button>
                     <Button color="red" type="button" negative onClick={async () => {
 
-                        const storedToken: token = JSON.parse(localStorage.getItem("token") as string);
+                        const storedToken = authSvc.getToken();
                         axios.defaults.headers.common['Authorization'] = `Bearer ${storedToken}`;
  
                         await apiConnector.deleteMovie(movie.id!)
                         window.location.reload();
                     }} >Delete</Button>
-                     <Button as={NavLink} to={`/`} type="submit" color="orange"  onClick={ async () =>logoutHandler() } >Logout</Button>
+                     <Button as={NavLink} to={`/`} type="submit" color="orange"  onClick={ async () =>authSvc.logOut()} >Logout</Button>
                   
                 </td>
             </tr>

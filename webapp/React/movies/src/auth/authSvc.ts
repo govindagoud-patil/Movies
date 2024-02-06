@@ -1,3 +1,4 @@
+import axios from "axios";
 import apiConnector from "../api/apiConnector"
 import { token } from "../models/token";
 import { UserDto } from "../models/userDto";
@@ -18,6 +19,10 @@ const authSvc = {
     getToken: () => {
         const storedToken: token = JSON.parse(localStorage.getItem("token") as string);
         return storedToken;
+    },
+    setAuthHeader:() => { 
+                       const storedToken = authSvc.getToken();
+                       axios.defaults.headers.common['Authorization'] = `Bearer ${storedToken}`;
     }
     
 }

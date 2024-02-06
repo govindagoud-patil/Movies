@@ -6,16 +6,14 @@ import { useNavigate } from "react-router-dom";
 import authSvc from "../../auth/authSvc";
 
 export default function Register()
-{
-   
+{   
     const navigate = useNavigate();
     const [userDto, setUserDto] = useState<UserDto>({
         email: '',
         password:''
     });
 
-    async function handleLogin() {
-     
+    async function handleLogin() {     
          authSvc.login(userDto);
          await timeout(100);
          navigate("listMovie");

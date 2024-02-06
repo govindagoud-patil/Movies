@@ -4,16 +4,14 @@ import { useEffect, useState } from "react"
 import { Button, Container } from "semantic-ui-react";
 import MovieTableItems from "./MovieTableItem";
 import { NavLink } from "react-router-dom";
-import axios from "axios";
 import authSvc from "../../auth/authSvc";
+
 
 export default function MovieTable() {
 
     const [movies, setMovies] = useState<MovieDto[]>([]);
 
     useEffect(() => {
-        const storedToken = authSvc.getToken();
-        axios.defaults.headers.common['Authorization'] = `Bearer ${storedToken}`;
         const fetchDate = async () => {
             const fetchedMovies = await apiConnector.getMovies();
             setMovies(fetchedMovies);
@@ -45,6 +43,7 @@ export default function MovieTable() {
                     </tbody>
                 </table>
                 <Button as={NavLink} to="createMovie" floated="right" type="button" content="Create Movie" positive />
+                <Button as={NavLink} to={`/`} type="submit" color="orange"  onClick={ async () =>authSvc.logOut()} >Logout</Button>
            
             </Container>
         </>

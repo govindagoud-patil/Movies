@@ -3,8 +3,7 @@ import { NavLink, useNavigate, useParams } from "react-router-dom"
 import { MovieDto } from "../../models/movieDto";
 import apiConnector from "../../api/apiConnector";
 import { Button, Form, Segment } from "semantic-ui-react";
-import axios from "axios";
-import { token } from "../../models/token";
+
 
 export default function MovieForm() {
 
@@ -20,21 +19,16 @@ export default function MovieForm() {
         category: ''
     });
         
-    function setAccesstokenheader()
-    {
-            const storedToken: token = JSON.parse(localStorage.getItem("token") as string);
-            axios.defaults.headers.common['Authorization'] = `Bearer ${storedToken}`;
-    }
          
     useEffect(() => {
-        setAccesstokenheader();
+
         if (id) {
             apiConnector.getMovieById(id).then(movie => setMovie(movie!));
         }
     }, [id]);
 
     function handleSubmit() {
-        setAccesstokenheader();
+
         if (!movie.id) {
             apiConnector.createMovie(movie).then(() => navigate('/movielist'));
         } else {

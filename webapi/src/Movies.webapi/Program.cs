@@ -31,7 +31,7 @@ builder.Services.AddExceptionHandler<CustomExceptionHandler>();
 
 var app = builder.Build();
 
-app.MapIdentityApi<IdentityUser>();
+app.MapGroup("api").MapIdentityApi<IdentityUser>().WithTags("UserManagement");
 
 if (app.Environment.IsDevelopment())
 {

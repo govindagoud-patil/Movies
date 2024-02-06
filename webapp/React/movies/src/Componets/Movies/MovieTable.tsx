@@ -4,12 +4,17 @@ import { useEffect, useState } from "react"
 import { Button, Container } from "semantic-ui-react";
 import MovieTableItems from "./MovieTableItem";
 import { NavLink } from "react-router-dom";
+import axios from "axios";
+import { token } from "../../models/token";
 
 export default function MovieTable() {
 
     const [movies, setMovies] = useState<MovieDto[]>([]);
-
+        const storedToken: token = JSON.parse(localStorage.getItem("token") as string);
+        axios.defaults.headers.common['Authorization'] = `Bearer ${storedToken}`;
     useEffect(() => {
+        const storedToken: token = JSON.parse(localStorage.getItem("token") as string);
+        axios.defaults.headers.common['Authorization'] = `Bearer ${storedToken}`;
         const fetchDate = async () => {
 
             const fetchedMovies = await apiConnector.getMovies();
@@ -20,7 +25,8 @@ export default function MovieTable() {
 
     return (
         <>
-            <Container className="container-style">
+            <Container className="container-style" >
+               
                 <table className="ui inverted table">
                     <thead style={{ textAlign: 'center' }}>
                         <tr>
@@ -39,10 +45,9 @@ export default function MovieTable() {
                             ))
                         )}
                     </tbody>
-
                 </table>
                 <Button as={NavLink} to="createMovie" floated="right" type="button" content="Create Movie" positive />
-
+           
             </Container>
         </>
     )

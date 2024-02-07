@@ -1,4 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Movies.Domain.Entities;
 using System;
 using System.Collections.Generic;
@@ -8,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Movies.Infrastructure
 {
-    public class MovieDbContext : DbContext
+    public class MovieDbContext : IdentityDbContext<IdentityUser>
     {
         public MovieDbContext(DbContextOptions options) : base(options)
         {

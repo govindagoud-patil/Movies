@@ -28,10 +28,7 @@ builder.Services.AddCors(opt => {
 builder.Services.AddApplication();
 builder.Services.AddExceptionHandler<CustomExceptionHandler>();
 
-<<<<<<< Updated upstream
 
-=======
->>>>>>> Stashed changes
 var app = builder.Build();
 
 app.MapGroup("api").MapIdentityApi<IdentityUser>().WithTags("UserManagement");

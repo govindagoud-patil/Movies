@@ -8,6 +8,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Client\**" />
+    <Content Remove="Client\**" />
+    <EmbeddedResource Remove="Client\**" />
+    <None Remove="Client\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="MediatR" Version="12.2.0" />
     <PackageReference Include="MediatR.Contracts" Version="2.0.1" />
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.0" />
@@ -22,15 +29,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Movies.Application\Movies.Application.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Client\movies\public\" />
-    <Folder Include="Client\movies\src\assets\" />
-    <Folder Include="Client\movies\src\Componets\Movies\" />
-    <Folder Include="Client\movies\src\Interceptors\" />
-    <Folder Include="Client\movies\src\api\" />
-    <Folder Include="Client\movies\src\router\" />
   </ItemGroup>
 
 </Project>

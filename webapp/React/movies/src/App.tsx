@@ -1,8 +1,8 @@
-import { Outlet, useLocation } from "react-router-dom";
-import { Container } from "semantic-ui-react";
-import MovieTable from "./Componets/Movies/MovieTable";
 import { useEffect } from "react";
 import { setupErrorHandlingInterceptor } from "./Interceptors/axiosinterceptor";
+import Register from "./Componets/user/Register";
+import { Outlet, useLocation } from "react-router-dom";
+import { Container } from "semantic-ui-react";
 
 function App() {
 
@@ -14,13 +14,15 @@ function App() {
     
     return (
         <>
+ 
             {
-              loc.pathname === '/' ? <MovieTable /> : (
+              loc.pathname === '/' ? <Register /> : (
                 <Container className="container-style">
                     <Outlet />
                 </Container>
                 )
-             }
+                }
+    
         </>    
     )
 

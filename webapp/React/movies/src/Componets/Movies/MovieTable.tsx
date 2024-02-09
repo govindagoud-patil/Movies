@@ -4,6 +4,8 @@ import { useEffect, useState } from "react"
 import { Button, Container } from "semantic-ui-react";
 import MovieTableItems from "./MovieTableItem";
 import { NavLink } from "react-router-dom";
+import authSvc from "../../auth/authSvc";
+
 
 export default function MovieTable() {
 
@@ -11,7 +13,6 @@ export default function MovieTable() {
 
     useEffect(() => {
         const fetchDate = async () => {
-
             const fetchedMovies = await apiConnector.getMovies();
             setMovies(fetchedMovies);
         }
@@ -20,7 +21,8 @@ export default function MovieTable() {
 
     return (
         <>
-            <Container className="container-style">
+            <Container className="container-style" >
+               
                 <table className="ui inverted table">
                     <thead style={{ textAlign: 'center' }}>
                         <tr>
@@ -39,10 +41,10 @@ export default function MovieTable() {
                             ))
                         )}
                     </tbody>
-
                 </table>
                 <Button as={NavLink} to="createMovie" floated="right" type="button" content="Create Movie" positive />
-
+                <Button as={NavLink} to={`/`} type="submit" color="orange"  onClick={ async () =>authSvc.logOut()} >Logout</Button>
+           
             </Container>
         </>
     )

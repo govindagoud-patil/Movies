@@ -3,12 +3,16 @@ import { MovieDto } from "../models/movieDto";
 import { GetMovieResponse } from "../models/getMoviesResponse";
 import { API_BASE_URL } from "../../config"
 import { GetMoviesByIdResponse } from "../models/getMovieByIdResponse";
+import { UserDto } from "../models/userDto";
+import { token } from "../models/token";
+import { getTokenResponse } from "../models/getTokenResponse";
+import authSvc from "../auth/authSvc";
 
 const apiConnector = {
 
     getMovies: async (): Promise<MovieDto[]> => {
 
-    
+            authSvc.setAuthHeader();
             const response: AxiosResponse<GetMovieResponse> =
                 await axios.get(`${API_BASE_URL}/movies`)
             const movies = response.data.movieDtos.map(movie => ({
@@ -20,40 +24,40 @@ const apiConnector = {
     },
 
     createMovie: async (movie: MovieDto): Promise<void> => {
-       
-
+            authSvc.setAuthHeader();
             await axios.post<number>(`${API_BASE_URL}/movies`, movie);
-
       
     },
 
 
     editMovie: async (movie: MovieDto, movieId: number): Promise<void> => {
    
-
+            authSvc.setAuthHeader();
             await axios.put<number>(`${API_BASE_URL}/movies/${movieId}`, movie);
-
     },
 
     deleteMovie: async (movieId: number): Promise<void> => {
-  
-
-            await axios.delete<number>(`${API_BASE_URL}/movies/${movieId}`);
-
+        authSvc.setAuthHeader();
+        await axios.delete<number>(`${API_BASE_URL}/movies/${movieId}`);
         
     },
 
-    getMovieById: async (movieId: string): Promise<MovieDto | undefined> => {
-
-       
-
+    getMovieById: async (movieId: string): Promise<MovieDto | undefined> => {     
+            authSvc.setAuthHeader();
             const response = await axios.get<GetMoviesByIdResponse>(`${API_BASE_URL}/movies/${movieId}`);
             const data = response.data.movieDto;
             return data;
 
+        },
+        
+    registerUser: async (user: UserDto): Promise<void> => {            
+            await axios.post<number>(`${API_BASE_URL}/register`,user);
+        },
 
-    }
 
-}
+    loginUser: async (user: UserDto): Promise<token> => {             
+                var response = await axios.post<getTokenResponse>(`${API_BASE_URL}/login`, user);
+                return response.data.accessToken;
+        }}
 
 export default apiConnector;

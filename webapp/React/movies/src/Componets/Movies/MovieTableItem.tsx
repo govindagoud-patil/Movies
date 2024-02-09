@@ -3,10 +3,12 @@ import { MovieDto } from "../../models/movieDto"
 import apiConnector from "../../api/apiConnector";
 import { NavLink } from "react-router-dom";
 
+
 interface Props {
     movie: MovieDto;
 }
-export default function MovieTableItems({ movie }: Props) {
+export default function MovieTableItems({ movie }: Props) {    
+
     return (
         <>
             <tr className="center aligned">
@@ -20,7 +22,8 @@ export default function MovieTableItems({ movie }: Props) {
                     <Button color="red" type="button" negative onClick={async () => {
                         await apiConnector.deleteMovie(movie.id!)
                         window.location.reload();
-                    }} >Delete</Button>
+                    }} >Delete</Button>                 
+                  
                 </td>
             </tr>
         </>

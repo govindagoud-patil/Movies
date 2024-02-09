@@ -28,7 +28,10 @@ builder.Services.AddCors(opt => {
 builder.Services.AddApplication();
 builder.Services.AddExceptionHandler<CustomExceptionHandler>();
 
+<<<<<<< Updated upstream
 
+=======
+>>>>>>> Stashed changes
 var app = builder.Build();
 
 app.MapGroup("api").MapIdentityApi<IdentityUser>().WithTags("UserManagement");
@@ -40,8 +43,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseExceptionHandler(_ => { });
-app.UseCors("AllowReactApp");
 app.UseHttpsRedirection();
+app.UseCors("AllowReactApp");
 app.AddMovieEndpoints();
 
 app.Run();

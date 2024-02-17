@@ -7,6 +7,8 @@ import { UserDto } from "../models/userDto";
 import { token } from "../models/token";
 import { getTokenResponse } from "../models/getTokenResponse";
 import authSvc from "../auth/authSvc";
+import { PaginationRequestParams, PaginationResult } from "../models/pagination";
+import axiosInstance from "./axiosInstance";
 
 const apiConnector = {
 
@@ -14,7 +16,7 @@ const apiConnector = {
 
             authSvc.setAuthHeader();
             const response: AxiosResponse<GetMovieResponse> =
-                await axios.get(`${API_BASE_URL}/movies`)
+                await axiosInstance.get(`${API_BASE_URL}/movies`)
             const movies = response.data.movieDtos.map(movie => ({
                 ...movie,
                 createDate: movie.createDate?.slice(0, 10) ?? ""
@@ -22,10 +24,40 @@ const apiConnector = {
             return movies;
 
     },
+    getPaginatedMovies: async (paginationRequestParams: PaginationRequestParams): Promise<PaginationResult<MovieDto[]>> => {
+
+            authSvc.setAuthHeader();
+            const response: AxiosResponse<PaginationResult<MovieDto[]>> =
+                await axiosInstance.get(`/movies/paginated?pageSize=${paginationRequestParams.pageSize}&pageNumber=${paginationRequestParams.pageNumber}`)
+       
+        if (response.data && Array.isArray(response.data.data))
+        {
+            const modifiedData = response.data.data.map(movie => ({
+                ...movie,
+                createDate: movie.createDate?.slice(0, 10) ?? ""
+
+            }));
+            return {
+                ...response.data, data: modifiedData
+            }
+            
+        } else {
+            return {
+                data: [],
+                paginationParams: {
+                    totalItems: 0,
+                    totalPages: 0,
+                    currentPage: 0,
+                    pagesize:0
+                }
+            }
+        }
+
+    },
 
     createMovie: async (movie: MovieDto): Promise<void> => {
             authSvc.setAuthHeader();
-            await axios.post<number>(`${API_BASE_URL}/movies`, movie);
+            await axiosInstance.post<number>(`/movies`, movie);
       
     },
 
@@ -33,12 +65,12 @@ const apiConnector = {
     editMovie: async (movie: MovieDto, movieId: number): Promise<void> => {
    
             authSvc.setAuthHeader();
-            await axios.put<number>(`${API_BASE_URL}/movies/${movieId}`, movie);
+            await axiosInstance.put<number>(`movies/${movieId}`, movie);
     },
 
     deleteMovie: async (movieId: number): Promise<void> => {
         authSvc.setAuthHeader();
-        await axios.delete<number>(`${API_BASE_URL}/movies/${movieId}`);
+        await axiosInstance.delete<number>(`/movies/${movieId}`);
         
     },
 
@@ -51,13 +83,14 @@ const apiConnector = {
         },
         
     registerUser: async (user: UserDto): Promise<void> => {            
-            await axios.post<number>(`${API_BASE_URL}/register`,user);
+            await axiosInstance.post<number>(`/register`,user);
         },
 
 
     loginUser: async (user: UserDto): Promise<token> => {             
-                var response = await axios.post<getTokenResponse>(`${API_BASE_URL}/login`, user);
-                return response.data.accessToken;
-        }}
+        const response = await axiosInstance.post<getTokenResponse>('/login', user);
+        return response.data.accessToken;
+    }
+}
 
 export default apiConnector;

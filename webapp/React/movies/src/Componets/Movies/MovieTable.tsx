@@ -1,28 +1,62 @@
 import apiConnector from "../../api/apiConnector";
 import { MovieDto } from "../../models/movieDto"
-import { useEffect, useState } from "react"
-import { Button, Container } from "semantic-ui-react";
+import React, { useEffect, useState } from "react"
+import { Button, Container, Dropdown, Pagination } from "semantic-ui-react";
 import MovieTableItems from "./MovieTableItem";
 import { NavLink } from "react-router-dom";
 import authSvc from "../../auth/authSvc";
+import { PaginationRequestParams } from "../../models/pagination";
 
 
 export default function MovieTable() {
 
     const [movies, setMovies] = useState<MovieDto[]>([]);
+    const [pageSize, setPageSize] = useState(5);
+    const [pageNumber, setPageNumber] = useState(0);
+    const [totalPageNumber, setTotalPageNumber] = useState(0);
+
+    const [paginationRequestParams, setPaginationRequestParams] = useState<PaginationRequestParams>({
+        pageSize: pageSize, pageNumber: pageNumber
+    });
+
+    const fetchDate = async () => {
+        const paginationResults = await apiConnector.getPaginatedMovies(paginationRequestParams);
+        if (paginationResults.data) {
+            const { data, paginationParams } = paginationResults;
+            if (data && paginationParams) {
+                setMovies(data);
+                setTotalPageNumber(paginationParams.totalPages);
+                setPageNumber(paginationParams.currentPage);
+                setPageSize(paginationParams.pagesize);
+            }
+        }
+
+    }
 
     useEffect(() => {
-        const fetchDate = async () => {
-            const fetchedMovies = await apiConnector.getMovies();
-            setMovies(fetchedMovies);
-        }
         fetchDate();
-    }, []);
+    }, [paginationRequestParams]);
+
+    const handlePageSizeChange = (_: React.SyntheticEvent, data: any) => {
+        setPaginationRequestParams({ ...paginationRequestParams, pageSize: data.value })
+    }
+
+    const handlePageNumberChange = (_: React.MouseEvent<HTMLAnchorElement>, data: any) => {
+        setPaginationRequestParams({ ...paginationRequestParams, pageNumber: data.activePage })
+    }
+
+
+    const options = [
+        { key: 5, text: '5', value: 5 },
+        { key: 10, text: '10', value: 10 },
+        { key: 20, text: '20', value: 20 },
+        { key: 30, text: '30', value: 30 },
+    ];
 
     return (
         <>
             <Container className="container-style" >
-               
+
                 <table className="ui inverted table">
                     <thead style={{ textAlign: 'center' }}>
                         <tr>
@@ -37,14 +71,20 @@ export default function MovieTable() {
                     <tbody>
                         {movies.length !== 0 && (
                             movies.map((movie, index) => (
-                                <MovieTableItems key={index} movie={movie}/>
+                                <MovieTableItems key={index} movie={movie} />
                             ))
                         )}
                     </tbody>
                 </table>
+                <div style={{ marginBottom: '20px', marginTop: '20px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <Dropdown selection options={options} value={pageSize} onChange={handlePageSizeChange}
+                    />
+                    <Pagination activePage={pageNumber} totalPages={totalPageNumber} onPageChange={handlePageNumberChange} />
+                </div>
+
                 <Button as={NavLink} to="createMovie" floated="right" type="button" content="Create Movie" positive />
-                <Button as={NavLink} to={`/`} type="submit" color="orange"  onClick={ async () =>authSvc.logOut()} >Logout</Button>
-           
+                <Button as={NavLink} to={`/`} type="submit" color="orange" onClick={async () => authSvc.logOut()} >Logout</Button>
+
             </Container>
         </>
     )

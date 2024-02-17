@@ -2,6 +2,8 @@
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Movies.Contracts;
+using Movies.Contracts.Exceptions;
+using Movies.Contracts.Responses;
 using Movies.Domain.Entities;
 using Movies.Infrastructure;
 using System;

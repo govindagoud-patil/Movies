@@ -1,5 +1,5 @@
 ﻿using Mapster;
-using Movies.Contracts;
+using Movies.Contracts.Responses;
 using Movies.Domain.Entities;
 
 namespace Movies.Application.Mappings;

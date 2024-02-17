@@ -1,6 +1,8 @@
 ﻿using FluentValidation;
 using MediatR;
 using Movies.Contracts;
+using Movies.Contracts.Errors;
+using Movies.Contracts.Exceptions;
 using System;
 using System.Collections.Generic;
 using System.Linq;

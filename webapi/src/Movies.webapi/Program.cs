@@ -2,12 +2,15 @@ using Microsoft.EntityFrameworkCore;
 using Movies.Domain.Entities;
 using Movies.Infrastructure;
 using Movies.Application;
-using Movies.Presentation;
 using Microsoft.EntityFrameworkCore.Internal;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.OpenApi.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Movies.webapi.Extensions;
+using Movies.webapi.Exceptions;
 var builder = WebApplication.CreateBuilder(args);
+
+
 
 builder.Services.AddAuthorization();
 builder.Services.AddEndpointsApiExplorer();
@@ -59,6 +62,6 @@ if (app.Environment.IsDevelopment())
 app.UseExceptionHandler(_ => { });
 app.UseHttpsRedirection();
 app.UseCors("AllowReactApp");
-app.AddMovieEndpoints();
+app.AddMovieEndpoints(false);
 
 app.Run();

@@ -4,6 +4,7 @@ using Movies.Infrastructure;
 using Movies.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Movies.Contracts;
+using Movies.Contracts.Exceptions;
 
 namespace Movies.Application.Commands
 {

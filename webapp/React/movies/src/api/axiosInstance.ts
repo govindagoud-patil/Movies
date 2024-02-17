@@ -1,21 +1,35 @@
 import axios, { AxiosResponse } from "axios";
+import { API_BASE_URL } from "../../config";
+import { PaginationResult } from "../models/pagination";
+
+
+
+const axiosInstance = axios.create({
+    baseURL : `${API_BASE_URL}`
+    
+});
 
 let isInterceptorSetup = false;
 
-export const setupErrorHandlingInterceptor =  () => {
+export const setupResponseInterceptor = () => {
 
-    if (!isInterceptorSetup)
-    {
-        axios.interceptors.response.use(
-            (response: AxiosResponse) => response,
+    if (!isInterceptorSetup) {
+        axiosInstance.interceptors.response.use(
+            (response: AxiosResponse) => { 
+                const paginationParams = response.headers['x-pagination'];
+                if (paginationParams)
+                {
+                    response.data = new PaginationResult(response.data, JSON.parse(paginationParams));
+                    return response as AxiosResponse<PaginationResult<any>>;
+                }
+                return response;
+            },
             (error) => {
                  
-                if (error.response)
-                {
+                if (error.response) {
                     const statusCode = error.response.status;
                     const data = error.response.data;
-                    switch (statusCode)
-                    {
+                    switch (statusCode) {
                         case 400:
                             if (data.errors) {
                                 const modalStateError = [];
@@ -45,8 +59,12 @@ export const setupErrorHandlingInterceptor =  () => {
                     }
                 }
                 return Promise.reject(error);
-             }
-            )
-        isInterceptorSetup = true;               
+            }
+        )
+        isInterceptorSetup = true;
     }
-}
+};
+
+setupResponseInterceptor();
+
+export default axiosInstance;

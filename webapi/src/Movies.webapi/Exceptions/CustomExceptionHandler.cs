@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
-using Movies.Contracts;
+using Movies.Contracts.Exceptions;
 
-namespace Movies.Presentation
+namespace Movies.webapi.Exceptions
 {
     /// <summary>
     /// Exception Handler
@@ -23,7 +23,7 @@ namespace Movies.Presentation
             {
                 NotFoundException => CreateProblemDetails(StatusCodes.Status404NotFound, "Not Found", exception.Message),
                 CustomValidationException => CreateProblemDetails(StatusCodes.Status400BadRequest, "validation error", "One or more validation error occured"),
-                _ => CreateProblemDetails(StatusCodes.Status500InternalServerError,"Internal Server Exception ",exception.Message)
+                _ => CreateProblemDetails(StatusCodes.Status500InternalServerError, "Internal Server Exception ", exception.Message)
 
             };
 

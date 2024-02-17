@@ -1,5 +1,5 @@
 ﻿using MediatR;
-using Movies.Contracts;
+using Movies.Contracts.Responses;
 using Movies.Infrastructure;
 using System;
 using System.Collections.Generic;

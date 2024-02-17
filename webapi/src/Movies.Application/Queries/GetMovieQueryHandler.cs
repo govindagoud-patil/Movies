@@ -1,7 +1,7 @@
 ﻿using Mapster;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using Movies.Contracts;
+using Movies.Contracts.Responses;
 using Movies.Infrastructure;
 using System;
 using System.Collections.Generic;

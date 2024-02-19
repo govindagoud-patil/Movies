@@ -5,22 +5,21 @@ import { Button, Container, Dropdown, Pagination } from "semantic-ui-react";
 import MovieTableItems from "./MovieTableItem";
 import { NavLink } from "react-router-dom";
 import authSvc from "../../auth/authSvc";
-import { PaginationRequestParams } from "../../models/pagination";
-
-
+import { setPgRequestParams } from '../../feature/pagination/paginationSlice'
+import { useAppDispatch, useAppSelector } from '../../redux/hooks'
 export default function MovieTable() {
 
+
+    const selectPgRequestParam = useAppSelector(state => state.pagination.paginationRequestParam);
+    const dispatch = useAppDispatch();
     const [movies, setMovies] = useState<MovieDto[]>([]);
     const [pageSize, setPageSize] = useState(5);
     const [pageNumber, setPageNumber] = useState(0);
     const [totalPageNumber, setTotalPageNumber] = useState(0);
 
-    const [paginationRequestParams, setPaginationRequestParams] = useState<PaginationRequestParams>({
-        pageSize: pageSize, pageNumber: pageNumber
-    });
 
     const fetchDate = async () => {
-        const paginationResults = await apiConnector.getPaginatedMovies(paginationRequestParams);
+        const paginationResults = await apiConnector.getPaginatedMovies(selectPgRequestParam);
         if (paginationResults.data) {
             const { data, paginationParams } = paginationResults;
             if (data && paginationParams) {
@@ -29,20 +28,21 @@ export default function MovieTable() {
                 setPageNumber(paginationParams.currentPage);
                 setPageSize(paginationParams.pagesize);
             }
+
         }
 
     }
 
     useEffect(() => {
         fetchDate();
-    }, [paginationRequestParams]);
+    }, [selectPgRequestParam.pageNumber, selectPgRequestParam.pageSize]);
 
     const handlePageSizeChange = (_: React.SyntheticEvent, data: any) => {
-        setPaginationRequestParams({ ...paginationRequestParams, pageSize: data.value })
+        dispatch(setPgRequestParams({ ...selectPgRequestParam, pageSize: data.value }))
     }
 
     const handlePageNumberChange = (_: React.MouseEvent<HTMLAnchorElement>, data: any) => {
-        setPaginationRequestParams({ ...paginationRequestParams, pageNumber: data.activePage })
+        dispatch(setPgRequestParams({ ...selectPgRequestParam, pageNumber: data.activePage }))
     }
 
 
